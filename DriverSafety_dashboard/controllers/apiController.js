@@ -17,7 +17,7 @@ exports.heartAlertPost = (req, res) => {
   heartAlert.save()
     .then(() => {
       // Data saved successfully
-      res.json({ message: 'Data saved successfully', data: jsonData });
+      res.status(200).json({ message: 'Data saved successfully', data: jsonData });
     })
     .catch((error) => {
       // Error occurred while saving data
@@ -28,7 +28,6 @@ exports.heartAlertPost = (req, res) => {
 exports.driveAlertPost = (req, res) => {
   // Access the JSON data from the request body
   const jsonData = req.body;
-  console.log(jsonData);
   // Create a new instance of the HeartAlert model with the JSON data
   const driveAlert = new driveAlertModel({
     timestamp:{
@@ -43,7 +42,7 @@ exports.driveAlertPost = (req, res) => {
   driveAlert.save()
     .then(() => {
       // Data saved successfully
-      res.json({ message: 'Data saved successfully', data: jsonData });
+      res.status(200).json({ message: 'Data saved successfully', data: jsonData });
     })
     .catch((error) => {
       // Error occurred while saving data
@@ -51,9 +50,54 @@ exports.driveAlertPost = (req, res) => {
     });
 };
 
+exports.getHeartAlertCount = async (req, res) => {
+  try {
+    // Calculate the total count
+    const totalCount = await heartAlertModel.countDocuments();
+
+    // Calculate the monthly count
+    const actualMonth = new Date();
+    actualMonth.setMonth(actualMonth.getMonth() - 1);
+    const monthlyCount = await heartAlertModel.countDocuments({ 'timestamp.date': { $gte: actualMonth.toISOString().split('T')[0] } });
+
+    // Calculate the daily count
+    const actualDay = new Date();
+    actualDay.setHours(0, 0, 0, 0);
+    const dailyCount = await heartAlertModel.countDocuments({ 'timestamp.date': actualDay.toISOString().split('T')[0] });
+
+    // Return the counts as JSON response
+    res.json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
+  } catch (error) {
+    // Handle any error that occurred during the counting
+    res.status(500).json({ error: 'An error occurred while counting the documents' });
+  }
+};
+
+exports.getDriveAlertCount = async (req, res) => {
+  try {
+    // Calculate the total count
+    const totalCount = await driveAlertModel.countDocuments();
+
+    // Calculate the monthly count
+    const actualMonth = new Date();
+    actualMonth.setMonth(actualMonth.getMonth() - 1);
+    const monthlyCount = await driveAlertModel.countDocuments({ 'timestamp.date': { $gte: actualMonth.toISOString().split('T')[0] } });
+
+    // Calculate the daily count
+    const actualDay = new Date();
+    actualDay.setHours(0, 0, 0, 0);
+    const dailyCount = await driveAlertModel.countDocuments({ 'timestamp.date': actualDay.toISOString().split('T')[0] });
+
+    // Return the counts as JSON response
+    res.json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
+  } catch (error) {
+    // Handle any error that occurred during the counting
+    res.status(500).json({ error: 'An error occurred while counting the documents' });
+  }
+};
+
 exports.getHeartAlertsCountByDate = (req, res) => {
-  const { year, month, day } = req.params;
-  const requestedDate = year + "-"+ month + "-" + day;
+  const { requestedDate } = req.params;
 
   heartAlertModel.aggregate([
     {
@@ -80,8 +124,7 @@ exports.getHeartAlertsCountByDate = (req, res) => {
 };
 
 exports.getDriveAlertsCountByDate = (req, res) => {
-  const { year, month, day } = req.params;
-  const requestedDate = year + "-"+ month + "-" + day;
+  const { requestedDate } = req.params;
 
   driveAlertModel.aggregate([
     {

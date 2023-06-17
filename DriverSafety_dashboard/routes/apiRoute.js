@@ -8,8 +8,10 @@ const apiController = require('../controllers/apiController');
 router.post('/post/heartAlert', apiController.heartAlertPost);
 router.post('/post/driveAlert', apiController.driveAlertPost);
 
-router.get('/get/heartAlert/date/:year/:month/:day', apiController.getHeartAlertsCountByDate);
-router.get('/get/driveAlert/date/:year/:month/:day', apiController.getDriveAlertsCountByDate);
+router.get('/get/heartAlert/count', apiController.getHeartAlertCount);
+router.get('/get/driveAlert/count', apiController.getDriveAlertCount);
+router.get('/get/heartAlert/date/:requestedDate', apiController.getHeartAlertsCountByDate);
+router.get('/get/driveAlert/date/:requestedDate', apiController.getDriveAlertsCountByDate);
 router.get('/get/heartAlert/time', apiController.getHeartAlertsCountByTime);
 router.get('/get/driveAlert/time', apiController.getDriveAlertsCountByTime);
 
