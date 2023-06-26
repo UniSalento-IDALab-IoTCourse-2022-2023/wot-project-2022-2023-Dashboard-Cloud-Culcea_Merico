@@ -6,6 +6,10 @@
 
 ## Altri Componenti
 
+- [Simulatore Server OBD](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/wot-project-2022-2023-OBDsimulator-Culcea_Merico.git)
+- [Gateway Android](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/culcea-merico__driver_safety_gateway.git)
+- [Dashboard + Cloud](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/wot-project-2022-2023-Dashboard-Cloud-Culcea_Merico.git)
+
 ## Componente Dashboard + Cloud
 
 ### Introduzione
