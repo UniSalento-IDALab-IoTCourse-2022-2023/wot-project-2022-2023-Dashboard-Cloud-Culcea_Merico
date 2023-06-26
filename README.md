@@ -118,6 +118,8 @@ Il codice è scritto seguendo le best practise del framework _Express.js_ e si a
 - */views* -> file HTML della Dashboard
 - */DBconfig* -> configurazione del Database
 
+### Flusso generale di esecuzione
+
 ### API Rest
 
 >![image](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/wot-project-2022-2023-Dashboard-Cloud-Culcea_Merico/assets/100310104/7985bc1c-4041-4c84-a126-9ae8bb25225c)
@@ -125,6 +127,9 @@ Il codice è scritto seguendo le best practise del framework _Express.js_ e si a
 >API Tree
 
 All'interno del file **routes/apiRoutes.js** sono presenti le definizioni degli URL delle API Rest e le funzioni di business associate che definiscono la logica dietro le api. Queste funzioni sono state definite all'interno del file **controllers/apiController.js**.
+
+>**NB:** Le API Rest hanno come root il seguente path
+> http://localhost:3000/api
 
 ```js
 // POST API
@@ -141,4 +146,301 @@ router.get('/get/heartAlert/date/:requestedDate', apiController.getHeartAlertsBy
 router.get('/get/driveAlert/date/:requestedDate', apiController.getDriveAlertsByDate);
 ```
 
+#### POST Api
+
+| API EndPoint |Header| Positive Response | Negative Response | Description |
+|:---:|:----:|:-:|:-:|:-:|
+|/post/heartAlert | Content-Type: application/json | Status code 200 | Status code 500 | Permette di caricare un alert relativo al Battito Cardiaco nel DB|
+|/post/driveAlert | Content-Type: application/json| Status code 200 | Status code 500 | Permette di caricare un alert relativo alla Guida Pericolosa nel DB|
+
+**NB:** Il body della richiesta dovrà contenere un _JSON_ costruito secondo il _DataModel_ dell'alert che si intende caricare nel DB. Per conoscere i DataModel fare riferimento alla sezione [Database](#database)
+
+#### GET Api
+
+<table>
+	<tr>
+		<th> API EndPoint </th>	
+		<th>Header</th>
+		<th>Positive Response</th>
+		<th>Negative Response</th>
+		<th>Body Response</th>
+		<th>Description</th>
+		<th>Parameter</th>
+	</tr>
+	<tr>
+		<td>/get/heartAlert/count</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di HeartRate Alert totali</td>
+<td>
+
+```json
+{
+  "total": 234,
+  "monthly": 65,
+  "daily": 12,
+}
+```
+
+</td>
+		<td>None</td>
+	</tr>
+	<tr>
+		<td>/get/driveAlert/count</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di Drive Alert totali</td>
+<td>
+
+```json
+{
+  "total": 234,
+  "monthly": 65,
+  "daily": 12,
+}
+```
+
+</td>
+		<td>None</td>
+	</tr>
+	<tr>
+		<td>/get/heartAlert/date/:requestedDate/count</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di HeartRate Alert per la data specificata</td>
+<td>
+
+```json
+{
+  "date": "2023-06-20",
+  "count": 3,
+}
+```
+
+</td>
+		<td>Stringa contenente una data in formato "YYYY-MM-DD"</td>
+	</tr>
+	<tr>
+		<td>/get/driveAlert/date/:requestedDate/count</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di Drive Alert per la data specificata</td>
+<td>
+
+```json
+{
+  "date": "2023-06-13",
+  "count": 5,
+}
+```
+
+</td>
+		<td>Stringa contenente una data in formato "YYYY-MM-DD"</td>
+	</tr>
+	<tr>
+		<td>/get/heartAlert/time</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di HeartRate Alert in diverse fasce orarie</td>
+<td>
+
+```json
+{
+	"00:00-08:00": 13,
+	"08:00-16:00": 42,
+	"16:00-00:00": 25
+}
+```
+
+</td>
+		<td>None</td>
+	</tr>
+	<tr>
+		<td>/get/driveAlert/time</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce un JSON contenente il numero di Drive Alert in diverse fasce orarie</td>
+<td>
+
+```json
+{
+	"00:00-08:00": 22,
+	"08:00-16:00": 11,
+	"16:00-00:00": 23
+}
+```
+
+</td>
+		<td>None</td>
+	</tr>
+	<tr>
+		<td>/get/heartAlert/date/:requestedDate</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce una lista contenente i JSON degli HeartRate Alert per la data specificata</td>
+<td>
+
+```json
+[
+		{
+		"timestamp": {
+			"date": "2023-06-24",
+			"time": "07:28:45"
+		},
+		"heartRate": {
+			"value": "50",
+			"unitMeasure": "BMP"
+		},
+		"vehicleID": "7ddd6d6a-4256-4eaa-832a-3edfefa04ffc",
+	},
+	{
+		"timestamp": {
+			"date": "2023-06-24",
+			"time": "17:12:16"
+		},
+		"acceleration": {
+			"value": "120",
+			"unitMeasure": "BMP"
+		},
+		"vehicleID": "5f320bad-8f1f-41cb-b88d-d5977dae61b6",
+	}
+]
+```
+
+</td>
+		<td>Stringa contenente una data in formato "YYYY-MM-DD"</td>
+	</tr>
+	<tr>
+		<td>/get/driveAlert/date/:requestedDate</td>
+		<td>Content-Type: application/json</td>
+		<td>Status code 200</td>
+		<td>Status code 500</td>
+		<td>Restituisce una lista contenente i JSON dei Drive Alert per la data specificata</td>
+<td>
+
+```json
+[
+		{
+		"timestamp": {
+			"date": "2023-06-24",
+			"time": "07:28:45"
+		},
+		"acceleration": {
+			"value": "-4.35",
+			"unitMeasure": "m/s^2"
+		},
+		"vehicleID": "7ddd6d6a-4256-4eaa-832a-3edfefa04ffc",
+	},
+	{
+		"timestamp": {
+			"date": "2023-06-24",
+			"time": "17:12:16"
+		},
+		"acceleration": {
+			"value": "-5.78",
+			"unitMeasure": "m/s^2"
+		},
+		"vehicleID": "5f320bad-8f1f-41cb-b88d-d5977dae61b6",
+	}
+]
+```
+
+</td>
+		<td>Stringa contenente una data in formato "YYYY-MM-DD"</td>
+	</tr>
+</table>
+
 ### Database
+
+Il database utilizzato è MongoDB. E' stato scelto un documentale in quanto i dati non necessitano di update una volta inseriti, inoltre le relazioni tra di essi sono assenti.
+
+La connessione al DB è gestita dal file _DBconfig/database.js_.
+
+Il componente, dopo essersi connesso all'istanza del DB, crea un database dedicato al nostro caso d'uso chiamato **safetyDriverDB**.
+
+>![image](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/wot-project-2022-2023-Dashboard-Cloud-Culcea_Merico/assets/100310104/2676a255-7f99-47e0-b81c-76f4a923859d)
+>
+>Immagine che illusta le collezioni create all'interno del DB
+
+I documenti caricati all'interno delle collezioni rispettano dei **DataModel** definiti all'interno dei file _models/heartAlertModel.js_ e _models/driveAlertModel.js_.
+
+Definizione del data model per gli alert relativi al battito cardiaco:
+
+```js
+const heartAlertSchema = new mongoose.Schema({
+  timestamp: {
+    date:{
+      type: String,
+      format: 'YYYY-MM-DD',
+      required: true
+    },
+    time:{
+      type: String,
+      format: 'HH:mm:ss',
+      required: true
+    }
+  },
+  heartRate:{
+    value:{
+      type: String,
+      required: true,
+    },
+    unitMeasure:{
+      type: String,
+      required: true,
+    }
+  },
+  vehicleID: {
+    type: String,
+    required: true
+  }  
+},
+{
+  collection: 'heartAlerts' // Specify the custom collection name
+}
+);
+```
+
+Definizione del data model per gli alert relativi alle accelerazioni anomale:
+
+```js
+const driveAlertSchema = new mongoose.Schema({
+  timestamp: {
+    date:{
+      type: String,
+      format: "YYYY-MM-DD",
+      required: true
+    },
+    time:{
+      type: String,
+      format: "HH:mm:ss",
+      required: true
+    }
+  },
+  acceleration:{
+    value:{
+      type: String,
+      required: true,
+    },
+    unitMeasure:{
+      type: String,
+      required: true,
+    }
+  },
+  vehicleID: {
+    type: String,
+    required: true
+  }
+},
+{
+  collection: 'driveAlerts' // Specify the custom collection name
+});
+```
+ 
