@@ -25,7 +25,8 @@
 
             <div class="navbar-nav w-100">
                 <a href="/" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="/about" class="nav-item nav-link"><i class="fa fa-th me-2"></i>About</a>
+                <a href="/alertsList" class="nav-item nav-link"><i class="fa fa-triangle-exclamation me-2"></i>Alert List</a>
+                <a href="/about" class="nav-item nav-link"><i class="fa fa-address-card me-2"></i>About</a>
             </div>
         </nav>
     </div>
@@ -37,9 +38,9 @@
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <div class="card shadow-sm text-center bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-heart-pulse fa-3x text-primary"></i>
-                        <div class="ms-3">
+                        <div class="mb-3">
                             <p class="mb-2">HeartRate Alerts</p>
                             <p class="mb-2">Total</p>
                             <h6 class="mb-0" id="totalHRA">0</h6>
@@ -47,9 +48,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <div class="card shadow-sm text-center bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-heart-pulse fa-3x text-info"></i>
-                        <div class="ms-3">
+                        <div class="mb-3">
                             <p class="mb-2">HeartRate Alerts</p>
                             <p class="mb-2">Last Month</p>
                             <h6 class="mb-0" id="monthlyHRA">0</h6>
@@ -57,9 +58,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <div class="card shadow-sm text-center bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-car-burst fa-3x text-primary"></i>
-                        <div class="ms-3">
+                        <div class="mb-3">
                             <p class="mb-2">Drive Alerts</p>
                             <p class="mb-2">Total</p>
                             <h6 class="mb-0" id="totalDA">0</h6>
@@ -67,9 +68,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <div class="card shadow-sm text-center bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-car-burst fa-3x text-info"></i>
-                        <div class="ms-3">
+                        <div class="mb-3">
                             <p class="mb-2">Drive Alerts</p>
                             <p class="mb-2">Last Month</p>
                             <h6 class="mb-0" id="monthlyDA">0</h6>
@@ -84,38 +85,80 @@
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light text-center rounded p-4">
+                    <div class="card shadow-sm bg-light text-center rounded p-4">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h6 class="mb-0">Heart Rate Alerts Number</h6>
-                            <a href="">Show All</a>
+                            <h6 class="mb-0">Heart Rate Alerts: Last 7 days</h6>
+                            <a href="/alertsList">Show All</a>
                         </div>
                         <canvas id="heart-chart"></canvas>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light text-center rounded p-4">
+                    <div class="card shadow-sm bg-light text-center rounded p-4">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h6 class="mb-0">Dangerous Drive Alerts Number</h6>
-                            <a href="">Show All</a>
+                            <h6 class="mb-0">Dangerous Drive Alerts: Last 7 days</h6>
+                            <a href="/alertsList">Show All</a>
                         </div>
                         <canvas id="drive-chart"></canvas>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Heart Rate Alerts Number Daytime</h6>
-                            <canvas id="heart-time-chart"></canvas>
-                        </div>
+                    <div class="card shadow-sm bg-light rounded h-100 p-4">
+                        <h6 class="mb-4">Heart Rate Alerts: Time slots</h6>
+                        <canvas id="heart-time-chart"></canvas>
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                
+                            </thead>
+                            <tbody>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 00:00 - 08:00</td>
+                                <td scope="col" id="hrTime0">0</td>
+                            </tr>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 08:00 - 16:00</td>
+                                <td scope="col" id="hrTime1">0</td>
+                            </tr>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 16:00 - 00:00</td>
+                                <td scope="col" id="hrTime2">0</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Dangerous Drive Alerts Daytime</h6>
-                            <canvas id="drive-time-chart"></canvas>
-                        </div>
+                </div>
+
+                <div class="col-sm-12 col-xl-6">
+                    <div class="card shadow-sm bg-light rounded h-100 p-4">
+                        <h6 class="mb-4">Dangerous Drive Alerts: Time slots</h6>
+                        <canvas id="drive-time-chart"></canvas>
+
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                
+                            </thead>
+                            <tbody>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 00:00 - 08:00</td>
+                                <td scope="col" id="ddTime0">0</td>
+                            </tr>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 08:00 - 16:00</td>
+                                <td scope="col" id="ddTime1">0</td>
+                            </tr>
+                            <tr class="text-dark">
+                                <td scope="col">&#x2022; 16:00 - 00:00</td>
+                                <td scope="col" id="ddTime2">0</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
             </div>
         </div>
         <!-- Chart End -->

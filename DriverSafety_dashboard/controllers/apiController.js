@@ -9,7 +9,7 @@ exports.heartAlertPost = (req, res) => {
   // Create a new instance of the HeartAlert model with the JSON data
   const heartAlert = new heartAlertModel({
     timestamp: jsonData.timestamp,
-    value: jsonData.value,
+    heartRate: jsonData.heartRate,
     vehicleID: jsonData.vehicleID
   });
 
@@ -30,11 +30,8 @@ exports.driveAlertPost = (req, res) => {
   const jsonData = req.body;
   // Create a new instance of the HeartAlert model with the JSON data
   const driveAlert = new driveAlertModel({
-    timestamp:{
-      date: jsonData.timestamp.date,
-      time: jsonData.timestamp.time
-    },
-    value: jsonData.value,
+    timestamp: jsonData.timestamp,
+    acceleration: jsonData.acceleration,
     vehicleID: jsonData.vehicleID
   });
 
@@ -66,7 +63,7 @@ exports.getHeartAlertCount = async (req, res) => {
     const dailyCount = await heartAlertModel.countDocuments({ 'timestamp.date': actualDay.toISOString().split('T')[0] });
 
     // Return the counts as JSON response
-    res.json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
+    res.status(200).json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
   } catch (error) {
     // Handle any error that occurred during the counting
     res.status(500).json({ error: 'An error occurred while counting the documents' });
@@ -89,12 +86,53 @@ exports.getDriveAlertCount = async (req, res) => {
     const dailyCount = await driveAlertModel.countDocuments({ 'timestamp.date': actualDay.toISOString().split('T')[0] });
 
     // Return the counts as JSON response
-    res.json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
+    res.status(200).json({ total: totalCount, monthly: monthlyCount, daily: dailyCount });
   } catch (error) {
     // Handle any error that occurred during the counting
     res.status(500).json({ error: 'An error occurred while counting the documents' });
   }
 };
+
+exports.getHeartAlertsByDate = (req, res) => {
+  const { requestedDate } = req.params;
+
+  heartAlertModel.find(
+    {
+      'timestamp.date': requestedDate
+    }
+  ).then((result) => {
+      if (result.length > 0) {
+        res.status(200).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    })
+    .catch((error) => {
+      // Handle any error that occurred during the aggregation
+      res.status(500).json({ error: 'An error occurred while fetching the data' });
+    });
+};
+
+exports.getDriveAlertsByDate = (req, res) => {
+  const { requestedDate } = req.params;
+
+  driveAlertModel.find(
+    {
+      'timestamp.date': requestedDate
+    }
+  ).then((result) => {
+      if (result.length > 0) {
+        res.status(200).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    })
+    .catch((error) => {
+      // Handle any error that occurred during the aggregation
+      res.status(500).json({ error: 'An error occurred while fetching the data' });
+    });
+};
+
 
 exports.getHeartAlertsCountByDate = (req, res) => {
   const { requestedDate } = req.params;
@@ -112,9 +150,9 @@ exports.getHeartAlertsCountByDate = (req, res) => {
   ])
     .then((result) => {
       if (result.length > 0) {
-        res.json({ date: requestedDate, count: result[0].count });
+        res.status(200).json({ date: requestedDate, count: result[0].count });
       } else {
-        res.json({ date: requestedDate, count: 0 });
+        res.status(200).json({ date: requestedDate, count: 0 });
       }
     })
     .catch((error) => {
@@ -139,9 +177,9 @@ exports.getDriveAlertsCountByDate = (req, res) => {
   ])
     .then((result) => {
       if (result.length > 0) {
-        res.json({ date: requestedDate, count: result[0].count });
+        res.status(200).json({ date: requestedDate, count: result[0].count });
       } else {
-        res.json({ date: requestedDate, count: 0 });
+        res.status(200).json({ date: requestedDate, count: 0 });
       }
     })
     .catch((error) => {
@@ -187,7 +225,7 @@ exports.getDriveAlertsCountByTime = (req, res) => {
         return acc;
       }, {});
 
-      res.json(response);
+      res.status(200).json(response);
     })
     .catch((error) => {
       res.status(500).json({ error: 'An error occurred while fetching the data' });
@@ -231,7 +269,7 @@ exports.getHeartAlertsCountByTime = (req, res) => {
         return acc;
       }, {});
 
-      res.json(response);
+      res.status(200).json(response);
     })
     .catch((error) => {
       res.status(500).json({ error: 'An error occurred while fetching the data' });

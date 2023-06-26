@@ -14,9 +14,15 @@ const driveAlertSchema = new mongoose.Schema({
       required: true
     }
   },
-  value: {
-    type: String,
-    required: true,
+  acceleration:{
+    value:{
+      type: String,
+      required: true,
+    },
+    unitMeasure:{
+      type: String,
+      required: true,
+    }
   },
   vehicleID: {
     type: String,

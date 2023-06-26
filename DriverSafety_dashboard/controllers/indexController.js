@@ -12,3 +12,8 @@ exports.about = (req, res) => {
     const filePath = path.join(__dirname, '../views/about.html');
     res.sendFile(filePath);
 };
+
+exports.alertsList = (req, res) => {
+    const filePath = path.join(__dirname, '../views/alertsList.html');
+    res.sendFile(filePath);
+};

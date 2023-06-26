@@ -92,7 +92,7 @@ function updateWeeklyHeartAlertsChart() {
 
 function getHeartAlertsCountByDate(date) {
 return new Promise((resolve, reject) => {
-    var url = `http://localhost:3000/api/get/heartAlert/date/${date}`;
+    var url = `http://localhost:3000/api/get/heartAlert/date/${date}/count`;
 
     fetch(url)
     .then(response => response.json())
@@ -157,7 +157,7 @@ function updateWeeklyDriveAlertsChart() {
 
 function getDriveAlertsCountByDate(date) {
 return new Promise((resolve, reject) => {
-    var url = `http://localhost:3000/api/get/driveAlert/date/${date}`;
+    var url = `http://localhost:3000/api/get/driveAlert/date/${date}/count`;
 
     fetch(url)
     .then(response => response.json())
@@ -191,6 +191,9 @@ function updateTimeHeartAlertChart() {
     getTimeHeartAlerts()
         .then(data => {
             var newData = [data['00:00-08:00'], data['08:00-16:00'], data['16:00-00:00']];
+            document.getElementById("hrTime0").textContent = data['00:00-08:00'];
+            document.getElementById("hrTime1").textContent = data['08:00-16:00'];
+            document.getElementById("hrTime2").textContent = data['16:00-00:00'];
             timeHeartAlertsChart.data.datasets[0].data = newData;
             timeHeartAlertsChart.update();
         })
@@ -230,6 +233,9 @@ function updateTimeDriveAlertChart() {
     getTimeDriveAlerts()
         .then(data => {
             var newData = [data['00:00-08:00'], data['08:00-16:00'], data['16:00-00:00']];
+            document.getElementById("ddTime0").textContent = data['00:00-08:00'];
+            document.getElementById("ddTime1").textContent = data['08:00-16:00'];
+            document.getElementById("ddTime2").textContent = data['16:00-00:00'];
             timeDriveAlertsChart.data.datasets[0].data = newData;
             timeDriveAlertsChart.update();
         })

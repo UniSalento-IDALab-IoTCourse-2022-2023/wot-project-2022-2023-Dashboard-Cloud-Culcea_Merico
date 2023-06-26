@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 // MongoDB connection string
-const mongoURI = 'mongodb://localhost:27017/safetyDriverDB';
+const mongoURI = 'mongodb://mongodb:27017/safetyDriverDB';
 
 const connectToDatabase = async () => {
   try {

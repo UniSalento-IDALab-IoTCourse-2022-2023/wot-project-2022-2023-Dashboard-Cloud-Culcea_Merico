@@ -3,6 +3,7 @@
     --primary: #009CFF;
     --light: #F3F6F9;
     --dark: #191C24;
+
 }
 
 .back-to-top {
@@ -51,6 +52,10 @@
 .btn-lg-square {
     width: 48px;
     height: 48px;
+}
+
+.card{
+    border-width: 2px;
 }
 
 .btn-square,
@@ -274,4 +279,4 @@
 .testimonial-carousel .owl-dot.active {
     background: var(--dark);
     border-color: var(--primary);
-}
+}   
