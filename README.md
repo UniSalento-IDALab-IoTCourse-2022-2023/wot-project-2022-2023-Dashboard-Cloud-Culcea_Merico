@@ -120,6 +120,88 @@ Il codice è scritto seguendo le best practise del framework _Express.js_ e si a
 
 ### Flusso generale di esecuzione
 
+Il FrontEnd del componente è gestito principalmente dai seguenti file:
+- _views/home.html_ e _public/js/home.js_
+- _views/alertList.html_ e _public/js/alertList.js_
+
+Quando un utente si collega a una di queste pagine, il componente renderizza l'HTML + CSS ed il relativo scripting file.
+
+La logica di aggiornamento della pagina _home_ è la seguente:
+
+```js
+// LOGICA DI UPDATE DELLA DASHBOARD
+updateHeartRateCounters(); //aggiorna i contatori degli alert relativi al battito cardiaco
+updateDriveCounters(); //aggiorna i contatori degli alert relativi alla guida anomala
+updateWeeklyHeartAlertsChart(); //aggiorna l'istogramma degli alert relativi al battito cardiaco
+updateWeeklyDriveAlertsChart(); // aggiorna l'istogramma degli alert relativi alla guida anomala
+updateTimeHeartAlertChart(); //aggiorna il grafico a ciambella relativo alle fasce orarie degli alert relativi al battito
+updateTimeDriveAlertChart(); // aggiorna il grafico a ciambella relativo alle fasce orarie degli alert relativi alla guida
+
+setInterval(() => {
+    updateHeartRateCounters();
+    updateDriveCounters();
+    updateWeeklyHeartAlertsChart();
+    updateWeeklyDriveAlertsChart();
+    updateTimeHeartAlertChart();
+    updateTimeDriveAlertChart();
+  }, 5000); // ogni 5 secondi fa il fetch per ottenere i dati aggiornati dal DB
+```
+
+La logica di aggiornamento della pagina _alertList_ è la seguente:
+```js
+// AGGIORNAMENTO QUANDO SI VISITA LA PAGINA 
+function onPageLoad(){
+  var currentDate = new Date();
+  var year = currentDate.getFullYear();
+  var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  var day = String(currentDate.getDate()).padStart(2, '0');
+  var formattedDate = year + '-' + month + '-' + day;  
+
+  updateDriveAlertsTable(formattedDate); //aggiorna la tabella degli alert relativi alla guida
+  updateHeartAlertsTable(formattedDate); //aggiorna la tabella degli alert relativi al battito
+}
+
+onPageLoad();
+
+//AGGIORNAMENTO QUANDO SI SELEZIONA UN GIORNO
+$('#calendar').on('change.datetimepicker', function(e) {
+  var selectedDate = e.date.format('YYYY-MM-DD');
+  updateHeartAlertsTable(selectedDate);
+  updateDriveAlertsTable(selectedDate);
+});
+```
+
+Ogni funzione di _update_:
+- manda una richiesta REST ad una delle [API](#api-rest) definite nella sezione successiva
+- preleva i dati della risposta
+- aggiorna i propri grafici con i nuovi dati
+
+Quando il componente riceve una chiamata REST su un EndPoint, esegue la relativa funzione definita nel _controller_.
+Come esempio è riportata la funzione che restituisce gli alert relativi al battito cardiaco in un determinato giorno. Essa viene invocata sulle richieste GET di questo EndPoint (http://localhost:3000/api/get/heartAlert/date/:requestedDate)
+
+```js
+exports.getHeartAlertsByDate = (req, res) => {
+  const { requestedDate } = req.params;
+
+  heartAlertModel.find(
+    {
+      'timestamp.date': requestedDate
+    }
+  ).then((result) => {
+      if (result.length > 0) {
+        res.status(200).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    })
+    .catch((error) => {
+      // Handle any error that occurred during the aggregation
+      res.status(500).json({ error: 'An error occurred while fetching the data' });
+    });
+};
+```
+La funzione esegue una query sul DB e restituisce i risultati alla view che ha invocato l'API.
+
 ### API Rest
 
 >![image](https://github.com/UniSalento-IDALab-IoTCourse-2022-2023/wot-project-2022-2023-Dashboard-Cloud-Culcea_Merico/assets/100310104/7985bc1c-4041-4c84-a126-9ae8bb25225c)
