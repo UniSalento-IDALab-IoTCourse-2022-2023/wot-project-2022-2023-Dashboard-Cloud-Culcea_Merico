@@ -408,7 +408,7 @@ curl --location 'http://127.0.0.1:3000/api/post/driveAlert' \
 
 ```json
 [
-		{
+	{
 		"timestamp": {
 			"date": "2023-06-24",
 			"time": "07:28:45"
@@ -446,7 +446,7 @@ curl --location 'http://127.0.0.1:3000/api/post/driveAlert' \
 
 ```json
 [
-		{
+	{
 		"timestamp": {
 			"date": "2023-06-24",
 			"time": "07:28:45"
@@ -561,5 +561,4 @@ const driveAlertSchema = new mongoose.Schema({
 {
   collection: 'driveAlerts' // Specify the custom collection name
 });
-```
- 
+``` 
