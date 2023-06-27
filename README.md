@@ -241,6 +241,38 @@ router.get('/get/driveAlert/date/:requestedDate', apiController.getDriveAlertsBy
 
 **NB:** Il body della richiesta dovrà contenere un _JSON_ costruito secondo il _DataModel_ dell'alert che si intende caricare nel DB. Per conoscere i DataModel fare riferimento alla sezione [Database](#database)
 
+Di seguito sono riportati degli esempi di post eseguiti tramite curl:
+```bash
+curl --location 'http://127.0.0.1:3000/api/post/heartAlert' \
+--header 'Content-Type: application/json' \
+--data '{
+    "timestamp": {
+        "date": "2023-06-30",
+        "time": "03:28:45"
+    },
+    "heartRate": {
+        "value": "60",
+        "unitMeasure": "BMP"
+    },
+    "vehicleID": "7ddd6d6g-4256-4eaa-832a-3edfffa04ffc"
+}'
+```
+
+```bash
+curl --location 'http://127.0.0.1:3000/api/post/driveAlert' \
+--header 'Content-Type: application/json' \
+--data '{
+    "timestamp": {
+        "date": "2023-06-30",
+        "time": "03:28:45"
+    },
+    "acceleration": {
+        "value": "4.56",
+        "unitMeasure": "m/s^2"
+    },
+    "vehicleID": "7ddd6d4a-4456-4eaa-832a-3edfffa04ffc"
+}'
+
 #### GET Api
 
 <table>
